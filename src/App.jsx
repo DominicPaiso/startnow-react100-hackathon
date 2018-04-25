@@ -4,23 +4,39 @@ import './App.css';
 import axios from 'axios';
 import Map from './Map';
 
-class App extends Component {
-    constructor(props) {
-      super(props);
-      
-      this.state = {
-        breweryAPI: []
-      };
+export default class App extends Component {
+  constructor(props) {
+    super(props);
 
-    }
+    this.state = {
+      breweryAPI: [],
+      eventFilter: '',
+      search: ''
+    };
+    // this.filterFunction = this.filterFunction.bind(this);
+    this.searchLimit = this.searchLimit.bind(this);
+  }
 
-componentWillMount() {
+  searchLimit(e) {
+    this.setState({ search: e.target.value.substr(0, 5) });
+  }
 
-  axios
-    .get('http://api.brewerydb.com/v2/')
-    .then(response => response.data)
-    .then(breweryAPI => this.setState({ breweryAPI }))
-}
+  componentWillMount() {
+
+    axios
+      .get('http://beermapping.com/webservice/locstate/5cbac9c92cef3317dc25bf57bcd1587a/ca&s=json')
+      .then(response => response.data)
+      .then(breweryAPI => this.setState({ breweryAPI }))
+  }
+
+  // filterFunction(e) {
+  //   let updatedList = this.state.eventFilter;
+  //   updatedList = updatedList.filter((breweries) => {
+  //     return breweries.zip.toLowerCase().indexOf(
+  //       e.breweries.zip.value.toLowerCase()) !== -1;
+  //   });
+  //   this.setState ({eventFilter: updatedList });
+  // }
 
   render() {
 
@@ -31,20 +47,39 @@ componentWillMount() {
           <h1 className="App-title">It's 5 O'Clock Somewhere</h1>
         </header>
 
-        <p className="App-intro">
-        {/* {this.state.breweryAPI.map(breweryAPI => (
-          <Map 
-            
-        ))} */}
-        </p>
-        <h4> To start please input your zip code </h4>
-        <input type='number' /> 
-        <button> Submit </button>
+        <h4> To search for breweries near you, please input your zip code </h4>
+        <form>
+          <div className="form-group">
+            <input type="number" placeholder="Search"
+            // onChange={this.filterFunction}
+            />
+          </div>
+        </form>
+        <br />
+        {/* <input type='number' />
+        <button> Filter </button> */}
+        <div className='row'>
+        <div className='App-body'>
+          {this.state.breweryAPI.map(breweryAPI => (
+            <Map
+              key={breweryAPI.id}
+              name={breweryAPI.name}
+              city={breweryAPI.city}
+              street={breweryAPI.street}
+              state={breweryAPI.state}
+              zip={breweryAPI.zip}
+              blogmap={breweryAPI.blogmap}
+            />
+          ))}
+        </div>
+</div>
 
       </div>
     );
   }
 }
+
+//API KEYS
 //src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB9v1dwzu7MaggY2uoGYr7Hh5grZHHnNa0&callback=initMap"
-//http://api.brewerydb.com/v2/
-export default App;
+// 5cbac9c92cef3317dc25bf57bcd1587a
+// export default App;

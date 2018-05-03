@@ -1,11 +1,10 @@
 import React from 'react';
 
 export default props => {
-    //let mapUrl = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyB9v1dwzu7MaggY2uoGYr7Hh5grZHHnNa0&libraries=places&callback=initMap' + props.name;
     let mapUrl = 'https://www.google.com/maps/search/' + props.name
     return (
         <div className='well'>
-            <h4>{props.name}</h4>
+            <h3>{props.name}</h3>
             <p>{props.street}</p>
             <p>{props.city},{' '}{props.state}</p>
             <p>{props.zip}</p>
